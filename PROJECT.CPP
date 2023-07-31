@@ -11,14 +11,14 @@ float heliy1=105;
 float heliy2=160;
 char changeSwing='s';
 char isGameOver='f';
-int obsx1[3];
-int obsx2[3];
-int obsy1[3];
-int obsy2[3];
+int obsx1[2][3];
+int obsx2[2][3];
+int obsy1[2][3];
+int obsy2[2][3];
 void Heli();
 void removeHeli();
-void obstacle();
-void
+void getObstaclePosition(int *x10,int *y10, int *x20,int *y20,int *x11, int *y11, int *x21, int *y21);
+
 void main()
 {
   clrscr();
@@ -31,19 +31,25 @@ void main()
   setfillstyle(1,3);
   floodfill(10,10,3);
   Heli();
+
+ 
    while(isGameOver=='f')
    {
+      // 1st obstacle points -upper & lower
+  getObstaclePosition(&obsx1[0][0],&obsy1[0][0],&obsx2[0][0],&obsy2[0][0],&obsx1[1][0],&obsy1[1][0],&obsx2[1][0],&obsy2[1][0])
+  // 2nd obstacle points -upper & lower
+  getObstaclePosition(&obsx1[0][1],&obsy1[0][1],&obsx2[0][1],&obsy2[0][1],&obsx1[1][1],&obsy1[1][1],&obsx2[1][1],&obsy2[1][1])
+  // 3rd obstacle points -upper & lower
+  getObstaclePosition(&obsx1[0][2],&obsy1[0][2],&obsx2[0][2],&obsy2[0][2],&obsx1[1][2],&obsy1[1][2],&obsx2[1][2],&obsy2[1][2])
+ 
+  // srand(time(0));
+  // possibleObsSize=maxy-150;
+  // y1Size=rand()%((possibleObsSize-50)-50+1)+50;
+  // y2Size=possibleObsSize-y1Size;
+   //obs1X=getmaxx()+(rand()%(150-50+1))+50;
 
-   srand(time(0));
-   possibleObsSize=maxy-150;
-   y1Size=rand()%((possibleObsSize-50)-50+1)+50;
-   y2Size=possibleObsSize-y1Size;
-   obs1X=getmaxx()+(rand()%(150-50+1))+50;
-
-    obs1X=100;
-
-
-    setcolor(BLACK);
+  //  obs1X=100;
+  
  //rectangle(obs1X-i,0,obs1X+30-i,y1Size);
 // rectangle(obs1X-i,maxy,obs1X+30-i,maxy-y2Size);
     delay(80);
@@ -82,9 +88,25 @@ void main()
   }
 
 }
-void obstacle()
-{
 
+void getObstaclePosition(int *x10,int *y10, int *x20,int *y20,int *x11, int *y11, int *x21, int *y21)
+{
+   srand(time(0));
+   possibleObsSize=maxy-150;
+   y1Size=rand()%((possibleObsSize-50)-50+1)+50;
+   y2Size=possibleObsSize-y1Size;
+   obsX=getmaxx()+(rand()%(150-50+1))+50;
+    //upward obstacle
+    *x10=obsX;*y10=0;
+    *x20=obsX+30;*y20=y1Size;
+    //downward obstacle
+    *x11=obsX;*y11=getmaxy();
+    *x21=obsX+30;*y21=getmaxy()-y2Size;
+
+
+
+ //rectangle(obs1X-i,0,obs1X+30-i,y1Size);
+// rectangle(obs1X-i,maxy,obs1X+30-i,maxy-y2Size);
 }
 void Heli()
 {
