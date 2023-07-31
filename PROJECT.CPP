@@ -9,9 +9,16 @@ float helix1=60;
 float helix2=135;
 float heliy1=105;
 float heliy2=160;
+char changeSwing='s';
 char isGameOver='f';
-void designHeli();
+int obsx1[3];
+int obsx2[3];
+int obsy1[3];
+int obsy2[3];
+void Heli();
 void removeHeli();
+void obstacle();
+void
 void main()
 {
   clrscr();
@@ -23,7 +30,7 @@ void main()
    //Fill whole background with cyan(3) initially...
   setfillstyle(1,3);
   floodfill(10,10,3);
-  designHeli();
+  Heli();
    while(isGameOver=='f')
    {
 
@@ -58,6 +65,7 @@ void main()
  else
   goUp=goUp--;
 
+
   heliy1=heliy1-goUp;
 
  //Fill whole background with cyan(3) initially...
@@ -65,13 +73,20 @@ void main()
   setfillstyle(1,3);
   rectangle(0,0,getmaxx(),getmaxy());
   floodfill(10,10,3);
-  designHeli();
+  if(changeSwing=='s')
+  changeSwing='l';
+  else
+  changeSwing='s' ;
+  Heli();
 
   }
 
 }
+void obstacle()
+{
 
-void designHeli()
+}
+void Heli()
 {
 
      //bounding box
@@ -94,10 +109,16 @@ void designHeli()
   floodfill(108,heliy1+35-goUp,BLACK);
 
  // swing
-  pieslice(68,heliy1+16-goUp,120,135,10);
-  pieslice(72,heliy1+16-goUp,40,60,10);
-  pieslice(68,heliy1+19-goUp,210,225,8);
-  pieslice(72,heliy1+19-goUp,345,360,8);
+ if(changeSwing=='s')
+ {
+   pieslice(68,heliy1+16-goUp,120,135,10);
+   pieslice(72,heliy1+19-goUp,345,360,8);
+ }
+ else
+ {
+   pieslice(72,heliy1+16-goUp,40,60,10);
+   pieslice(68,heliy1+19-goUp,210,225,8);
+ }
   //swing downpart
   pieslice(70,heliy1+20-goUp,240,300,16);
   //swing circle
