@@ -17,8 +17,10 @@ int obsy1[2][3];
 int obsy2[2][3];
 void Heli();
 void removeHeli();
-void getObstaclePosition(int *x10,int *y10, int *x20,int *y20,int *x11, int *y11, int *x21, int *y21);
-
+void getObstaclePosition(int obsNo,int *x10,int *y10, int *x20,int *y20,int *x11, int *y11, int *x21, int *y21);
+void obstacle(int topx1,int topy1,int topx2,int topy2,int bottomx1,int bottomy1,int bottomx2,int bottomy2);
+void removeObstacle(int topx1,int topy1,int topx2,int topy2,int bottomx1,int bottomy1,int bottomx2,int bottomy2);
+void decrementObstaclePosition();
 void main()
 {
   clrscr();
@@ -31,16 +33,23 @@ void main()
   setfillstyle(1,3);
   floodfill(10,10,3);
   Heli();
+  int obsNo=0; //1st obstacle
+  getObstaclePosition(0,&obsx1[0][obsNo],&obsy1[0][obsNo],&obsx2[0][obsNo],&obsy2[0][obsNo],&obsx1[1][obsNo],&obsy1[1][obsNo],&obsx2[1][obsNo],&obsy2[1][obsNo]);
+  obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
+  
+  obsNo=1; //2nd obstacle
+  getObstaclePosition(0,&obsx1[0][obsNo],&obsy1[0][obsNo],&obsx2[0][obsNo],&obsy2[0][obsNo],&obsx1[1][obsNo],&obsy1[1][obsNo],&obsx2[1][obsNo],&obsy2[1][obsNo]);
+  obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
 
- 
+  int obsNo=2; //3rd obstacle
+  getObstaclePosition(0,&obsx1[0][obsNo],&obsy1[0][obsNo],&obsx2[0][obsNo],&obsy2[0][obsNo],&obsx1[1][obsNo],&obsy1[1][obsNo],&obsx2[1][obsNo],&obsy2[1][obsNo]);
+  obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
    while(isGameOver=='f')
    {
-      // 1st obstacle points -upper & lower
-  getObstaclePosition(&obsx1[0][0],&obsy1[0][0],&obsx2[0][0],&obsy2[0][0],&obsx1[1][0],&obsy1[1][0],&obsx2[1][0],&obsy2[1][0])
-  // 2nd obstacle points -upper & lower
-  getObstaclePosition(&obsx1[0][1],&obsy1[0][1],&obsx2[0][1],&obsy2[0][1],&obsx1[1][1],&obsy1[1][1],&obsx2[1][1],&obsy2[1][1])
-  // 3rd obstacle points -upper & lower
-  getObstaclePosition(&obsx1[0][2],&obsy1[0][2],&obsx2[0][2],&obsy2[0][2],&obsx1[1][2],&obsy1[1][2],&obsx2[1][2],&obsy2[1][2])
+  // // 2nd obstacle points -upper & lower
+  // getObstaclePosition(&obsx1[0][1],&obsy1[0][1],&obsx2[0][1],&obsy2[0][1],&obsx1[1][1],&obsy1[1][1],&obsx2[1][1],&obsy2[1][1])
+  // // 3rd obstacle points -upper & lower
+  // getObstaclePosition(&obsx1[0][2],&obsy1[0][2],&obsx2[0][2],&obsy2[0][2],&obsx1[1][2],&obsy1[1][2],&obsx2[1][2],&obsy2[1][2])
  
   // srand(time(0));
   // possibleObsSize=maxy-150;
@@ -52,11 +61,18 @@ void main()
   
  //rectangle(obs1X-i,0,obs1X+30-i,y1Size);
 // rectangle(obs1X-i,maxy,obs1X+30-i,maxy-y2Size);
-    delay(80);
    //  setcolor(3);
  // rectangle(obs1X-i,0,obs1X+30-i,y1Size);
  // rectangle(obs1X-i,maxy,obs1X+30-i,maxy-y2Size);
+    delay(80);
      removeHeli();
+     obsNo=0;
+     removeObstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
+     obsNo=1;
+     removeObstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
+     obsNo=2;
+     removeObstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
+    decrementObstaclePosition();
   if(kbhit())
   {
   buttonValue=getch();
@@ -84,18 +100,51 @@ void main()
   else
   changeSwing='s' ;
   Heli();
-
+  obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
+  obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
+  obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
   }
 
 }
+void decrementObstaclePosition()
+{
+  //1st obstacle
+  obsx1[0][0]-=10;
+  obsx2[0][0]-=10;
+  obsx1[1][0]-=10;
+  obsx2[1][0]-=10;
+  //2nd obstacle
+  obsx1[0][1]-=10;
+  obsx2[0][1]-=10;
+  obsx1[1][1]-=10;
+  obsx2[1][1]-=10;
+  //3rd obstacle
+  obsx1[0][2]-=10;
+  obsx2[0][2]-=10;
+  obsx1[1][2]-=10;
+  obsx2[1][2]-=10;
+}
 
-void getObstaclePosition(int *x10,int *y10, int *x20,int *y20,int *x11, int *y11, int *x21, int *y21)
+void obstacle(int topx1,int topy1,int topx2,int topy2,int bottomx1,int bottomy1,int bottomx2,int bottomy2)
+{
+  setcolor(WHITE);
+  rectangle(topx1,topy1,topx2,topy2);
+  rectangle(bottomx1,bottomy1,bottomx2,bottomy2);
+}
+
+void removeObstacle(int topx1,int topy1,int topx2,int topy2,int bottomx1,int bottomy1,int bottomx2,int bottomy2)
+{
+  setcolor(3);
+  rectangle(topx1,topy1,topx2,topy2);
+  rectangle(bottomx1,bottomy1,bottomx2,bottomy2);
+}
+void getObstaclePosition(int obsNo,int *x10,int *y10, int *x20,int *y20,int *x11, int *y11, int *x21, int *y21)
 {
    srand(time(0));
-   possibleObsSize=maxy-150;
-   y1Size=rand()%((possibleObsSize-50)-50+1)+50;
-   y2Size=possibleObsSize-y1Size;
-   obsX=getmaxx()+(rand()%(150-50+1))+50;
+   int possibleObsSize=getmaxy()-150;
+   int y1Size=rand()%((possibleObsSize-50)-50+1)+50;  //just a random no between 50 to possibleObsSize
+   int y2Size=possibleObsSize-y1Size;
+   int obsX=getmaxx()+(rand()%(150-50+1))+50;
     //upward obstacle
     *x10=obsX;*y10=0;
     *x20=obsX+30;*y20=y1Size;
@@ -113,7 +162,7 @@ void Heli()
 
      //bounding box
    setcolor(WHITE);
-   rectangle(60,heliy1+45-goUp,135,heliy1+55-goUp);
+   rectangle(60,heliy1+30-goUp,135,heliy1+55-goUp);
 
   //Helicopter frontpart-red
   setcolor(BLACK);
