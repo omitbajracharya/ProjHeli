@@ -34,15 +34,15 @@ void main()
   floodfill(10,10,3);
   Heli();
   int obsNo=0; //1st obstacle
-  getObstaclePosition(0,&obsx1[0][obsNo],&obsy1[0][obsNo],&obsx2[0][obsNo],&obsy2[0][obsNo],&obsx1[1][obsNo],&obsy1[1][obsNo],&obsx2[1][obsNo],&obsy2[1][obsNo]);
+  getObstaclePosition(obsNo,&obsx1[0][obsNo],&obsy1[0][obsNo],&obsx2[0][obsNo],&obsy2[0][obsNo],&obsx1[1][obsNo],&obsy1[1][obsNo],&obsx2[1][obsNo],&obsy2[1][obsNo]);
   obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
   
   obsNo=1; //2nd obstacle
-  getObstaclePosition(0,&obsx1[0][obsNo],&obsy1[0][obsNo],&obsx2[0][obsNo],&obsy2[0][obsNo],&obsx1[1][obsNo],&obsy1[1][obsNo],&obsx2[1][obsNo],&obsy2[1][obsNo]);
+  getObstaclePosition(obsNo,&obsx1[0][obsNo],&obsy1[0][obsNo],&obsx2[0][obsNo],&obsy2[0][obsNo],&obsx1[1][obsNo],&obsy1[1][obsNo],&obsx2[1][obsNo],&obsy2[1][obsNo]);
   obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
 
-  int obsNo=2; //3rd obstacle
-  getObstaclePosition(0,&obsx1[0][obsNo],&obsy1[0][obsNo],&obsx2[0][obsNo],&obsy2[0][obsNo],&obsx1[1][obsNo],&obsy1[1][obsNo],&obsx2[1][obsNo],&obsy2[1][obsNo]);
+  obsNo=2; //3rd obstacle
+  getObstaclePosition(obsNo,&obsx1[0][obsNo],&obsy1[0][obsNo],&obsx2[0][obsNo],&obsy2[0][obsNo],&obsx1[1][obsNo],&obsy1[1][obsNo],&obsx2[1][obsNo],&obsy2[1][obsNo]);
   obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
    while(isGameOver=='f')
    {
@@ -100,8 +100,11 @@ void main()
   else
   changeSwing='s' ;
   Heli();
+  obsNo=0;
   obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
+  obsNo=1;
   obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
+  obsNo=2;
   obstacle(obsx1[0][obsNo],obsy1[0][obsNo],obsx2[0][obsNo],obsy2[0][obsNo],obsx1[1][obsNo],obsy1[1][obsNo],obsx2[1][obsNo],obsy2[1][obsNo]);
   }
 
@@ -138,6 +141,7 @@ void removeObstacle(int topx1,int topy1,int topx2,int topy2,int bottomx1,int bot
   rectangle(topx1,topy1,topx2,topy2);
   rectangle(bottomx1,bottomy1,bottomx2,bottomy2);
 }
+
 void getObstaclePosition(int obsNo,int *x10,int *y10, int *x20,int *y20,int *x11, int *y11, int *x21, int *y21)
 {
    srand(time(0));
@@ -145,12 +149,19 @@ void getObstaclePosition(int obsNo,int *x10,int *y10, int *x20,int *y20,int *x11
    int y1Size=rand()%((possibleObsSize-50)-50+1)+50;  //just a random no between 50 to possibleObsSize
    int y2Size=possibleObsSize-y1Size;
    int obsX=getmaxx()+(rand()%(150-50+1))+50;
+   int someDistance;
+   if(obsNo==0)
+   someDistance=0;
+   else if(obsNo==1)
+   someDistance=200;
+   else if(obsNo==2)
+   someDistance=360;
     //upward obstacle
-    *x10=obsX;*y10=0;
-    *x20=obsX+30;*y20=y1Size;
+    *x10=obsX+someDistance;*y10=0;
+    *x20=obsX+someDistance+30;*y20=y1Size;
     //downward obstacle
-    *x11=obsX;*y11=getmaxy();
-    *x21=obsX+30;*y21=getmaxy()-y2Size;
+    *x11=obsX+someDistance;*y11=getmaxy();
+    *x21=obsX+someDistance+30;*y21=getmaxy()-y2Size;
 
 
 
@@ -160,9 +171,9 @@ void getObstaclePosition(int obsNo,int *x10,int *y10, int *x20,int *y20,int *x11
 void Heli()
 {
 
-     //bounding box
-   setcolor(WHITE);
-   rectangle(60,heliy1+30-goUp,135,heliy1+55-goUp);
+  //    //bounding box
+  //  setcolor(WHITE);
+  //  rectangle(60,heliy1+30-goUp,135,heliy1+55-goUp);
 
   //Helicopter frontpart-red
   setcolor(BLACK);
@@ -208,11 +219,10 @@ void Heli()
 }
 void removeHeli()
 {
-     //bounding box
-   setcolor(3);
-   setfillstyle(1,3);
-   rectangle(60,heliy1+45-goUp,135,heliy1+55-goUp);
-
+  //bounding box
+  setcolor(3);
+  setfillstyle(1,3);
+  rectangle(60,heliy1+45-goUp,135,heliy1+55-goUp);
   pieslice(100,heliy1+45-goUp,0,90,35);
   line(100,heliy1+10-goUp,70,heliy1+28-goUp);
   line(100,heliy1+45-goUp,70,heliy1+28-goUp);
