@@ -51,51 +51,13 @@ void main()
 
   obsNo = 2; // 3rd obstacle
   getObstaclePosition(obsNo, &obsx1[0][obsNo], &obsy1[0][obsNo], &obsx2[0][obsNo], &obsy2[0][obsNo], &obsx1[1][obsNo], &obsy1[1][obsNo], &obsx2[1][obsNo], &obsy2[1][obsNo]);
+  obsx1[0][obsNo]=-1;
   obsColor=6;
   obstacle(obsColor,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
+  obsx1[0][obsNo]=-1;
   while (isGameOver == 'f')
   {
-  //  if((obsx2[0][1]>obsx2[0][0]) && ((obsx2[0][1]-obsx1[0][0])<150))
-  //   {
-	// obsx1[0][1]+=300;
-	// obsx2[0][1]+=300;
-	// obsx1[1][1]+=300;
-	// obsx2[1][1]+=300;
-  //   }
-  //  if((obsx2[0][2]>obsx2[0][1]) && ((obsx2[0][2]-obsx1[0][1])<150))
-  //  {
-  //     obsx1[0][2]+=300;
-  //     obsx2[0][2]+=300;
-  //     obsx2[1][2]+=300;
-  //     obsx2[1][2]+=300;
-  //  }
-  //  if((obsx2[0][0]>obsx2[0][2]) && ((obsx2[0][0]-obsx1[0][2])<80))
-  //  {
-  //     obsx1[0][0]+=300;
-  //     obsx2[0][0]+=300;
-  //     obsx2[1][0]+=300;
-  //     obsx2[1][0]+=300;
-  //  }
 
-
-    // // 2nd obstacle points -upper & lower
-    // getObstaclePosition(&obsx1[0][1],&obsy1[0][1],&obsx2[0][1],&obsy2[0][1],&obsx1[1][1],&obsy1[1][1],&obsx2[1][1],&obsy2[1][1])
-    // // 3rd obstacle points -upper & lower
-    // getObstaclePosition(&obsx1[0][2],&obsy1[0][2],&obsx2[0][2],&obsy2[0][2],&obsx1[1][2],&obsy1[1][2],&obsx2[1][2],&obsy2[1][2])
-
-    // srand(time(0));
-    // possibleObsSize=maxy-150;
-    // y1Size=rand()%((possibleObsSize-50)-50+1)+50;
-    // y2Size=possibleObsSize-y1Size;
-    // obs1X=getmaxx()+(rand()%(150-50+1))+50;
-
-    //  obs1X=100;
-
-    // rectangle(obs1X-i,0,obs1X+30-i,y1Size);
-    // rectangle(obs1X-i,maxy,obs1X+30-i,maxy-y2Size);
-    //  setcolor(3);
-    // rectangle(obs1X-i,0,obs1X+30-i,y1Size);
-    // rectangle(obs1X-i,maxy,obs1X+30-i,maxy-y2Size);
     delay(80);
     removeHeli();
     obsNo = 0;
@@ -213,7 +175,7 @@ void main()
 void checkGameOver() //Check on three obstacle upper and lower hits or not...
 {
 
- if(heliy1<=0 || heliy2>=getmaxy()-60)
+ if(heliy1<=0 || heliy2>=getmaxy()-30)
  {
    isGameOver='t';
    return;
