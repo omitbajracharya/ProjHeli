@@ -32,23 +32,27 @@ void main()
   initgraph(&gd, &gm, "../bgi");
   int maxx = getmaxx();
   int maxy = getmaxy();
-  int possibleObsSize, y1Size, y2Size, obs1X, i = 0;
+  int possibleObsSize, y1Size, y2Size, obs1X,i=0;
   // Fill whole background with cyan(3) initially...
   setfillstyle(1, 3);
   floodfill(10, 10, 3);
   Heli();
   int temp;
+  int obsColor;
   int obsNo = 0; // 1st obstacle
   getObstaclePosition(obsNo, &obsx1[0][obsNo], &obsy1[0][obsNo], &obsx2[0][obsNo], &obsy2[0][obsNo], &obsx1[1][obsNo], &obsy1[1][obsNo], &obsx2[1][obsNo], &obsy2[1][obsNo]);
-  obstacle(8,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
+  obsColor=8;
+  obstacle(obsColor,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
 
   obsNo = 1; // 2nd obstacle
   getObstaclePosition(obsNo, &obsx1[0][obsNo], &obsy1[0][obsNo], &obsx2[0][obsNo], &obsy2[0][obsNo], &obsx1[1][obsNo], &obsy1[1][obsNo], &obsx2[1][obsNo], &obsy2[1][obsNo]);
-  obstacle(7,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
+    obsColor=7;
+  obstacle(obsColor,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
 
   obsNo = 2; // 3rd obstacle
   getObstaclePosition(obsNo, &obsx1[0][obsNo], &obsy1[0][obsNo], &obsx2[0][obsNo], &obsy2[0][obsNo], &obsx1[1][obsNo], &obsy1[1][obsNo], &obsx2[1][obsNo], &obsy2[1][obsNo]);
-  obstacle(6,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
+  obsColor=6;
+  obstacle(obsColor,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
   while (isGameOver == 'f')
   {
   //  if((obsx2[0][1]>obsx2[0][0]) && ((obsx2[0][1]-obsx1[0][0])<150))
@@ -110,12 +114,11 @@ void main()
       }
       else if (buttonValue == 32 || buttonValue == 72)
       {
-	    goUp = goUp + 15;
-	buttonValue = 100;
+	    goUp = goUp + 30;
       }
     }
     else
-      goUp = goUp--;
+      goUp = goUp-5;
 
     heliy1 = heliy1 - goUp;
     heliy2 = heliy2 - goUp;
@@ -193,19 +196,28 @@ void main()
       }
     }
     obsNo = 0;
-    obstacle(8,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
+     obsColor=8;
+    obstacle(obsColor,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
     obsNo = 1;
-    obstacle(7,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
+    obsColor=7;
+    obstacle(obsColor,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
     obsNo = 2;
-    obstacle(6,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
+    obsColor=6;
+    obstacle(obsColor,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
     checkGameOver();
     score++;
   }
   gameoverDisplay();
 }
 
-void checkGameOver()
+void checkGameOver() //Check on three obstacle upper and lower hits or not...
 {
+
+ if(heliy1<=0 || heliy2>=getmaxy()-60)
+ {
+   isGameOver='t';
+   return;
+ }
   for(int i=0;i<=2;i++)
   {
     for(int j=0;j<=1;j++)
@@ -213,12 +225,13 @@ void checkGameOver()
 	if(((helix1>=obsx1[j][i] && helix1<=obsx2[j][i])||(helix2>=obsx1[j][i] && helix2<=obsx2[j][i])) && ((heliy1>=obsy1[j][i] && heliy1<=obsy2[j][i]) || (heliy2>=obsy1[j][i] && heliy2<=obsy2[j][i])))
 	{
 	   isGameOver='t';
+	   return;
 	 }
      }
   }
 }
 
-void decrementObstaclePosition()
+void decrementObstaclePosition() //Move obastacle to left position
 {
   // 1st obstacle
   obsx1[0][0] -= 10;
@@ -246,7 +259,7 @@ void obstacle(int color,int topx1, int topy1, int topx2, int topy2, int bottomx1
 
 void removeObstacle(int topx1, int topy1, int topx2, int topy2, int bottomx1, int bottomy1, int bottomx2, int bottomy2)
 {
-  setcolor(3);
+  setcolor(3);//background color here
   rectangle(topx1, topy1, topx2, topy2);
   rectangle(bottomx1, bottomy1, bottomx2, bottomy2);
 }
@@ -273,12 +286,10 @@ void getObstaclePosition(int obsNo, int *x10, int *y10, int *x20, int *y20, int 
   *y20 = y1Size;
   // downward obstacle
   *x11 = obsX + someDistance;
-  *y11 = getmaxy();
+  *y11 = getmaxy()- y2Size;
   *x21 = obsX + someDistance + 30;
-  *y21 = getmaxy() - y2Size;
+  *y21 = getmaxy(); 
 
-  // rectangle(obs1X-i,0,obs1X+30-i,y1Size);
-  // rectangle(obs1X-i,maxy,obs1X+30-i,maxy-y2Size);
 }
 void Heli()
 {
