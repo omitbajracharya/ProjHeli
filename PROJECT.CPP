@@ -4,6 +4,7 @@
 #include<time.h>
 #include<dos.h>
 #include<graphics.h>
+#include<string.h>
 float goUp = 0;
 float helix1 = 60;
 float helix2 = 135;
@@ -11,16 +12,19 @@ float heliy1 = 105;
 float heliy2 = 160;
 char changeSwing = 's';
 char isGameOver = 'f';
+int score=0;
 int obsx1[2][3];
 int obsx2[2][3];
 int obsy1[2][3];
 int obsy2[2][3];
 void Heli();
 void removeHeli();
+void checkGameOver();
 void getObstaclePosition(int obsNo, int *x10, int *y10, int *x20, int *y20, int *x11, int *y11, int *x21, int *y21);
 void obstacle(int color,int topx1, int topy1, int topx2, int topy2, int bottomx1, int bottomy1, int bottomx2, int bottomy2);
 void removeObstacle(int topx1, int topy1, int topx2, int topy2, int bottomx1, int bottomy1, int bottomx2, int bottomy2);
 void decrementObstaclePosition();
+void gameoverDisplay();
 void main()
 {
   clrscr();
@@ -47,7 +51,6 @@ void main()
   obstacle(6,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
   while (isGameOver == 'f')
   {
-
   //  if((obsx2[0][1]>obsx2[0][0]) && ((obsx2[0][1]-obsx1[0][0])<150))
   //   {
 	// obsx1[0][1]+=300;
@@ -115,7 +118,19 @@ void main()
       goUp = goUp--;
 
     heliy1 = heliy1 - goUp;
-
+    heliy2 = heliy2 - goUp;
+    if(heliy2>=(getmaxy()-5))
+    {
+      goUp++;
+     heliy2=getmaxy();
+      heliy1=heliy2-55;
+    }
+    if(heliy1<=5)
+    {
+      goUp-=50;
+      heliy1=0;
+      heliy2=heliy1+55;
+    }
     // Fill whole background with cyan(3) initially...
     setcolor(3);
     setfillstyle(1, 3);
@@ -183,10 +198,26 @@ void main()
     obstacle(7,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
     obsNo = 2;
     obstacle(6,obsx1[0][obsNo], obsy1[0][obsNo], obsx2[0][obsNo], obsy2[0][obsNo], obsx1[1][obsNo], obsy1[1][obsNo], obsx2[1][obsNo], obsy2[1][obsNo]);
+    checkGameOver();
+    score++;
+  }
+  gameoverDisplay();
+}
 
-
+void checkGameOver()
+{
+  for(int i=0;i<=2;i++)
+  {
+    for(int j=0;j<=1;j++)
+    {
+	if(((helix1>=obsx1[j][i] && helix1<=obsx2[j][i])||(helix2>=obsx1[j][i] && helix2<=obsx2[j][i])) && ((heliy1>=obsy1[j][i] && heliy1<=obsy2[j][i]) || (heliy2>=obsy1[j][i] && heliy2<=obsy2[j][i])))
+	{
+	   isGameOver='t';
+	 }
+     }
   }
 }
+
 void decrementObstaclePosition()
 {
   // 1st obstacle
@@ -329,4 +360,15 @@ void removeHeli()
   pieslice(105, heliy1 + 45 - goUp, 250, 270, 7);
   pieslice(125, heliy1 + 45 - goUp, 300, 320, 7);
   rectangle(95, heliy1 + 54 - goUp, 135, heliy1 + 55 - goUp);
+}
+
+void gameoverDisplay()
+{
+  char str[100];
+sprintf(str, "%d", score);
+  setfillstyle(1, 3);
+  floodfill(10, 10, 3);
+  outtextxy(200, 100, "GameOver");
+outtextxy(200, 300, strcat("Your Score is: ",str));
+getch();
 }
